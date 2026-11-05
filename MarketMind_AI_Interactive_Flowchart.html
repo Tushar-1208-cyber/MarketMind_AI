@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarketMind AI — Architecture & Pipeline Flowchart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #090d16;
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        header {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(9, 13, 22, 0.95) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.25rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(12px);
+        }
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .badge {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            color: #818cf8;
+            padding: 0.35rem 0.8rem;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        h1 {
+            font-size: 1.45rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .meta-tags {
+            font-size: 0.82rem;
+            color: #94a3b8;
+            display: flex;
+            gap: 1.2rem;
+        }
+        .meta-tags span strong {
+            color: #e2e8f0;
+        }
+        main {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 1400px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 2.5rem 1.5rem;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            overflow-x: auto;
+            text-align: center;
+        }
+        .legend-bar {
+            width: 100%;
+            max-width: 1400px;
+            margin-top: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+        .legend-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 0.85rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.82rem;
+        }
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .dot-blue { background: #3b82f6; box-shadow: 0 0 10px #3b82f6; }
+        .dot-green { background: #10b981; box-shadow: 0 0 10px #10b981; }
+        .dot-red { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+        .dot-purple { background: #818cf8; box-shadow: 0 0 10px #818cf8; }
+        .dot-amber { background: #f59e0b; box-shadow: 0 0 10px #f59e0b; }
+        .dot-teal { background: #14b8a6; box-shadow: 0 0 10px #14b8a6; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>MarketMind AI — Autonomous Multi-Agent Architecture Flowchart</h1>
+            <span class="badge">Live Render</span>
+        </div>
+        <div class="meta-tags">
+            <span><strong>Course:</strong> Agentic AI</span>
+            <span><strong>Mentor:</strong> Pranshu Tiwari</span>
+            <span><strong>Team:</strong> Tushar Gupta, Keshav, Gaurav</span>
+        </div>
+    </header>
+
+    <main>
+        <div class="chart-container">
+            <div class="mermaid">
+flowchart TD
+    %% Global Styling
+    classDef userNode fill:#1e293b,stroke:#64748b,stroke-width:2px,color:#f8fafc;
+    classDef guardNode fill:#991b1b,stroke:#ef4444,stroke-width:2px,color:#ffffff;
+    classDef adkNode fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#ffffff;
+    classDef crewNode fill:#065f46,stroke:#10b981,stroke-width:2px,color:#ffffff;
+    classDef mcpNode fill:#92400e,stroke:#f59e0b,stroke-width:2px,color:#ffffff;
+    classDef boardNode fill:#3730a3,stroke:#818cf8,stroke-width:2px,color:#ffffff;
+    classDef outNode fill:#115e59,stroke:#14b8a6,stroke-width:2px,color:#ffffff;
+
+    subgraph S1 ["🛡️ Layer 1: Ingestion & Adversarial Defense"]
+        U["👤 User / Analyst Input<br/>(Ticker e.g. NVDA, TSLA, AAPL)"]:::userNode
+        G{"🛡️ PromptGuardrail<br/>Prompt Injection Mitigation"}:::guardNode
+        U --> G
+    end
+
+    subgraph S2 ["🏢 Layer 2: Google ADK (Host Control Room)"]
+        MGR["👔 ManagerAgent (Orchestrator)<br/>Session Run ID & Lifecycle Callbacks"]:::adkNode
+        G -->|Input Sanitized & Safe| MGR
+    end
+
+    subgraph S3 ["🗂️ Layer 3: Central Context Backbone (Linear O(N) Messaging)"]
+        BB[("🗂️ Thread-Safe Blackboard<br/>Thread Lock Protected Memory Store")]:::boardNode
+    end
+    MGR <-->|Initialize State & Lifecycle| BB
+
+    subgraph S4 ["👥 Layer 4: CrewAI Worker Crew (Cross-Framework via A2A)"]
+        DS["🔍 DataScoutAgent<br/>Real-Time Data Harvester"]:::crewNode
+        TM["📰 TopicModelingAgent<br/>NMF Clusters + Sentiment (-1 to +1)"]:::crewNode
+    end
+    MGR -.->|A2A Protocol JSON Envelope| DS
+    DS --> TM
+    TM -->|Write Topics & Sentiment| BB
+
+    subgraph S5 ["🛠️ Layer 5: Model Context Protocol (MCP JSON-RPC 2.0)"]
+        MCP_MD["📈 mcp_market_data<br/>Yahoo Finance (60D Historical)"]:::mcpNode
+        MCP_NS["🌐 mcp_news_search<br/>Google News RSS Feed"]:::mcpNode
+        MCP_FC["🧮 mcp_financial_calc<br/>SMA-20, Volatility, Sharpe"]:::mcpNode
+    end
+    DS -->|JSON-RPC 2.0| MCP_MD
+    DS -->|JSON-RPC 2.0| MCP_NS
+    DS -->|JSON-RPC 2.0| MCP_FC
+
+    subgraph S6 ["🔬 Layer 6: Quantitative & Knowledge Grounding (Google ADK)"]
+        FC["📊 ForecastingAgent<br/>statsmodels ARIMA(2,1,1)<br/>5-Day Trajectory (No Hallucination)"]:::adkNode
+        RAG["📚 RAGResearchAgent<br/>TF-IDF Knowledge Base<br/>SEC 10-K Due Diligence Q&As"]:::adkNode
+    end
+    BB <-->|Read Historical Prices| FC
+    FC -->|Write 5-Day Target + % Chg| BB
+    BB <-->|Query Corporate Filings| RAG
+    RAG -->|Write Grounded Context| BB
+
+    subgraph S7 ["🧠 Layer 7: Cognitive Reasoning Engine (Google ADK)"]
+        ADV["🧠 AdvisoryAgent<br/>ReAct Loop: Thought ➡️ Action ➡️ Observation<br/>Dynamic Reflection (Threshold > 55%)"]:::adkNode
+    end
+    BB -->|Aggregate All Signals| ADV
+    ADV -->|Iterative Reflection| ADV
+
+    subgraph S8 ["📊 Layer 8: Delivery & Observability"]
+        PYD["📐 Pydantic v2 Validation<br/>FinalMarketIntelligenceReport"]:::outNode
+        DASH["🚀 Live Streamlit UI (Port 8501)<br/>Consensus BUY/HOLD/SELL Banner"]:::outNode
+        DB[("💾 SQLite Audit DB<br/>Latency, Cost & Provenance Log")]:::outNode
+    end
+    ADV --> PYD
+    PYD --> DASH
+    PYD --> DB
+            </div>
+        </div>
+
+        <div class="legend-bar">
+            <div class="legend-card"><div class="legend-dot dot-red"></div><span><strong>Security Guardrail:</strong> Threat Defense</span></div>
+            <div class="legend-card"><div class="legend-dot dot-blue"></div><span><strong>Google ADK:</strong> Control Room & Quant</span></div>
+            <div class="legend-card"><div class="legend-dot dot-green"></div><span><strong>CrewAI Workers:</strong> Data Scout & NLP</span></div>
+            <div class="legend-card"><div class="legend-dot dot-amber"></div><span><strong>MCP Protocol:</strong> JSON-RPC 2.0 Tools</span></div>
+            <div class="legend-card"><div class="legend-dot dot-purple"></div><span><strong>Blackboard:</strong> Linear O(N) State</span></div>
+            <div class="legend-card"><div class="legend-dot dot-teal"></div><span><strong>Output:</strong> Pydantic v2 & Dashboard</span></div>
+        </div>
+    </main>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                darkMode: true,
+                background: '#090d16',
+                primaryColor: '#1e3a8a',
+                primaryTextColor: '#ffffff',
+                primaryBorderColor: '#3b82f6',
+                lineColor: '#60a5fa',
+                secondaryColor: '#065f46',
+                tertiaryColor: '#3730a3'
+            }
+        });
+    </script>
+</body>
+</html>
