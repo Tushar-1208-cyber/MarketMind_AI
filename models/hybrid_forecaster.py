@@ -23,20 +23,31 @@ import warnings
 from typing import Dict, Any, Tuple
 from statsmodels.tsa.arima.model import ARIMA
 
-import torch
-import torch.nn as nn
+try:
+    import torch
+    import torch.nn as nn
+    TORCH_AVAILABLE = True
+except (ImportError, Exception):
+    TORCH_AVAILABLE = False
+    torch = None
+    nn = None
 
 
-class ResidualLSTM(nn.Module):
-    def __init__(self, input_size: int = 1, hidden_size: int = 16, num_layers: int = 1):
-        super().__init__()
-        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
-        self.fc = nn.Linear(hidden_size, 1)
+if TORCH_AVAILABLE:
+    class ResidualLSTM(nn.Module):
+        def __init__(self, input_size: int = 1, hidden_size: int = 16, num_layers: int = 1):
+            super().__init__()
+            self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+            self.fc = nn.Linear(hidden_size, 1)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        out, _ = self.lstm(x)
-        out = self.fc(out[:, -1, :])
-        return out
+        def forward(self, x: torch.Tensor) -> torch.Tensor:
+            out, _ = self.lstm(x)
+            out = self.fc(out[:, -1, :])
+            return out
+else:
+    class ResidualLSTM:
+        def __init__(self, *args, **kwargs):
+            pass
 
 
 class HybridForecaster:
@@ -69,7 +80,7 @@ class HybridForecaster:
         # Step 2: PyTorch LSTM Residual Modeling
         try:
             seq_len = 5
-            if len(residuals) > seq_len + 5:
+            if TORCH_AVAILABLE and len(residuals) > seq_len + 5:
                 # Prepare input sequences
                 res_norm = (residuals - np.mean(residuals)) / (np.std(residuals) + 1e-6)
                 X_seq = []
